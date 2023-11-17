@@ -56,7 +56,7 @@ namespace DynamoXmlConverter.Controllers
             return Guid.NewGuid().ToString();
         }
 
-        public static string XmlToPrettyJson(string xml)
+        private static string XmlToPrettyJson(string xml)
         {
             var doc = XDocument.Parse(xml);
             return JsonConvert.SerializeXNode(doc, Newtonsoft.Json.Formatting.Indented);
