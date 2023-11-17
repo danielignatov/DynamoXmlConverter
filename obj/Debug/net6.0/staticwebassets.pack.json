@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\danie\\Documents\\GitHub\\DynamoXmlConverter\\DynamoXmlConverter\\wwwroot\\uploads\\5bd47e6e-4cb2-401f-97f1-217a6fcdbbfd.json",
+      "PackagePath": "staticwebassets\\uploads\\5bd47e6e-4cb2-401f-97f1-217a6fcdbbfd.json"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.DynamoXmlConverter.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.build.DynamoXmlConverter.props",
+      "PackagePath": "build\\DynamoXmlConverter.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.DynamoXmlConverter.props",
+      "PackagePath": "buildMultiTargeting\\DynamoXmlConverter.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildTransitive.DynamoXmlConverter.props",
+      "PackagePath": "buildTransitive\\DynamoXmlConverter.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

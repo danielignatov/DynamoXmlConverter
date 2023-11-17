@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "Hash": "jkv1biwsg2fBpjjHJhIQk5JD92AAWI6nntTK5Dy8zdk=",
+  "Source": "DynamoXmlConverter",
+  "BasePath": "_content/DynamoXmlConverter",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "DynamoXmlConverter\\wwwroot",
+      "Source": "DynamoXmlConverter",
+      "ContentRoot": "C:\\Users\\danie\\Documents\\GitHub\\DynamoXmlConverter\\DynamoXmlConverter\\wwwroot\\",
+      "BasePath": "_content/DynamoXmlConverter",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\danie\\Documents\\GitHub\\DynamoXmlConverter\\DynamoXmlConverter\\wwwroot\\uploads\\5bd47e6e-4cb2-401f-97f1-217a6fcdbbfd.json",
+      "SourceId": "DynamoXmlConverter",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\danie\\Documents\\GitHub\\DynamoXmlConverter\\DynamoXmlConverter\\wwwroot\\",
+      "BasePath": "_content/DynamoXmlConverter",
+      "RelativePath": "uploads/5bd47e6e-4cb2-401f-97f1-217a6fcdbbfd.json",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\5bd47e6e-4cb2-401f-97f1-217a6fcdbbfd.json"
+    }
+  ]
+}
