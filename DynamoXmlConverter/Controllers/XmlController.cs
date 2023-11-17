@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace DynamoXmlConverter.Controllers
@@ -21,34 +22,45 @@ namespace DynamoXmlConverter.Controllers
         [Route("api/xml/upload")]
         public async Task<IActionResult> Upload(IFormFile? file = null)
         {
-            // Validation
-            if (file == null || file.Length == 0)
-                return BadRequest("No file uploaded.");
-
-            var extension = Path.GetExtension(file.FileName);
-
-            if (extension.ToLower() != ".xml")
-                return BadRequest("Incorrect file type extension. Expected: .xml");
-
-            // Read the xml file
-            string xmlString;
-
-            using (var reader = new StreamReader(file.OpenReadStream()))
+            try
             {
-                xmlString = await reader.ReadToEndAsync();
+                // Validation
+                if (file == null || file.Length == 0)
+                    return BadRequest("No file uploaded.");
+
+                var extension = Path.GetExtension(file.FileName);
+
+                if (extension.ToLower() != ".xml")
+                    return BadRequest("Incorrect file type extension. Expected: .xml");
+
+                // Read the xml file
+                string xmlString;
+
+                using (var reader = new StreamReader(file.OpenReadStream()))
+                {
+                    xmlString = await reader.ReadToEndAsync();
+                }
+
+                // Write the json file
+                string fileFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, FILE_UPLOADS_FOLDER_NAME);
+
+                if (!Directory.Exists(fileFolderPath))
+                    Directory.CreateDirectory(fileFolderPath);
+
+                var filePath = Path.Combine(fileFolderPath, GetFileName() + ".json");
+
+                await System.IO.File.WriteAllTextAsync(filePath, XmlToPrettyJson(xmlString));
+
+                return Ok($"File created. {filePath}");
             }
-
-            // Write the json file
-            string fileFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, FILE_UPLOADS_FOLDER_NAME);
-
-            if (!Directory.Exists(fileFolderPath))
-                Directory.CreateDirectory(fileFolderPath);
-
-            var filePath = Path.Combine(fileFolderPath, GetFileName() + ".json");
-
-            await System.IO.File.WriteAllTextAsync(filePath, XmlToPrettyJson(xmlString));
-
-            return Ok($"File created. {filePath}");
+            catch(XmlException)
+            {
+                return BadRequest("Invalid .xml file.");
+            }
+            catch(Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         private static string GetFileName()

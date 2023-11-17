@@ -9,8 +9,8 @@ namespace DynamoXmlConverter.Tests
     {
         private const string WEB_ROOT_PATH = "C:\\Users\\danie\\Documents\\GitHub\\DynamoXmlConverter\\DynamoXmlConverter\\wwwroot";
 
-        XmlController _controller;
-        IWebHostEnvironment _hostingEnvironment;
+        readonly XmlController _controller;
+        readonly IWebHostEnvironment _hostingEnvironment;
 
         public XmlControllerTests()
         {
@@ -82,6 +82,32 @@ namespace DynamoXmlConverter.Tests
             // Assert
             Assert.NotNull(result);
             Assert.True(resultType?.StatusCode == 200);
+        }
+
+        [Fact]
+        public async Task Upload_IncorrectlyFormattedFile_BadRequest()
+        {
+            // Arrange
+            // Setup mock file using a memory stream
+            var content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><note>  <to>Tove</to>  <from>Jani</from>  <heading>Reminder</heading>  <body>Don't forget me this weekend!";
+            var fileName = "test.xml";
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(content);
+            writer.Flush();
+            stream.Position = 0;
+
+            // Create FormFile with desired data
+            IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
+
+            // Act
+            var result = await _controller.Upload(file);
+            var resultType = result as BadRequestObjectResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.True(resultType?.StatusCode == 400);
+            Assert.True(resultType?.Value?.ToString() == "Invalid .xml file.");
         }
     }
 }
