@@ -1,7 +1,8 @@
+using DynamoXmlConverter.Extensions;
+using DynamoXmlConverter.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using System.Collections.Concurrent;
 using System.Xml;
-using System.Xml.Linq;
 
 namespace DynamoXmlConverter.Controllers
 {
@@ -20,58 +21,95 @@ namespace DynamoXmlConverter.Controllers
 
         [HttpPost]
         [Route("api/xml/upload")]
-        public async Task<IActionResult> Upload(IFormFile? file = null)
+        public IActionResult Upload(List<IFormFile> files)
         {
             try
             {
-                // Validation
-                if (file == null || file.Length == 0)
+                if (files.Count == 0)
                     return BadRequest("No file uploaded.");
 
-                var extension = Path.GetExtension(file.FileName);
+                var results = UploadFiles(files);
 
-                if (extension.ToLower() != ".xml")
-                    return BadRequest("Incorrect file type extension. Expected: .xml");
-
-                // Read the xml file
-                string xmlString;
-
-                using (var reader = new StreamReader(file.OpenReadStream()))
-                {
-                    xmlString = await reader.ReadToEndAsync();
-                }
-
-                // Write the json file
-                string fileFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, FILE_UPLOADS_FOLDER_NAME);
-
-                if (!Directory.Exists(fileFolderPath))
-                    Directory.CreateDirectory(fileFolderPath);
-
-                var filePath = Path.Combine(fileFolderPath, GetFileName() + ".json");
-
-                await System.IO.File.WriteAllTextAsync(filePath, XmlToPrettyJson(xmlString));
-
-                return Ok($"File created. {filePath}");
+                return Ok(results);
             }
-            catch(XmlException)
+            catch (Exception)
             {
-                return BadRequest("Invalid .xml file.");
-            }
-            catch(Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong.");
             }
         }
 
-        private static string GetFileName()
+        // https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/how-to-write-a-simple-parallel-foreach-loop
+        private List<FileUploadResult> UploadFiles(List<IFormFile> files)
         {
-            return Guid.NewGuid().ToString();
+            var fileUploadResults = new ConcurrentBag<FileUploadResult>();
+
+            Parallel.ForEach(files, file =>
+            {
+                var result = UploadFile(file);
+                fileUploadResults.Add(result);
+            });
+
+            return fileUploadResults.ToList();
         }
 
-        private static string XmlToPrettyJson(string xml)
+        private FileUploadResult UploadFile(IFormFile file)
         {
-            var doc = XDocument.Parse(xml);
-            return JsonConvert.SerializeXNode(doc, Newtonsoft.Json.Formatting.Indented);
+            var result = new FileUploadResult();
+
+            // Validation
+            if (file == null || file.Length == 0)
+            {
+                result.Message = "No file to upload.";
+                return result;
+            }
+
+            result.FileName = file.FileName;
+
+            var extension = Path.GetExtension(file.FileName);
+
+            if (extension.ToLower() != ".xml")
+            {
+                result.Message = "Incorrect file type extension. Expected: .xml";
+                return result;
+            }
+
+            string fileFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, FILE_UPLOADS_FOLDER_NAME);
+
+            if (!Directory.Exists(fileFolderPath))
+                Directory.CreateDirectory(fileFolderPath);
+
+            var fileNameNoExt = Path.GetFileNameWithoutExtension(file.FileName);
+
+            var filePath = Path.Combine(fileFolderPath, fileNameNoExt + ".json");
+
+            if (System.IO.File.Exists(filePath))
+            {
+                result.Message = "File already uploaded.";
+                return result;
+            }
+
+            // Read the xml file
+            string xmlString;
+
+            using (var reader = new StreamReader(file.OpenReadStream()))
+            {
+                xmlString = reader.ReadToEnd();
+            }
+
+            // Write the json file
+            try
+            {
+                string json = xmlString.XmlToPrettyJson();
+                json.SafelyWriteToFile(filePath, false);
+            }
+            catch (XmlException)
+            {
+                result.Message = "Invalid .xml file.";
+                return result;
+            }
+
+            result.Success = true;
+            return result;
         }
     }
 }

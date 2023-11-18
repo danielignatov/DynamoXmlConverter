@@ -19,12 +19,13 @@ namespace DynamoXmlConverter.Tests
         }
 
         [Fact]
-        public async Task Upload_NoFile_BadRequest()
+        public void Upload_NoFiles_BadRequest()
         {
             // Arrange
+            var files = new List<IFormFile>();
 
             // Act
-            var result = await _controller.Upload();
+            var result = _controller.Upload(files);
             var resultType = result as BadRequestObjectResult;
 
             // Assert
@@ -34,7 +35,7 @@ namespace DynamoXmlConverter.Tests
         }
 
         [Fact]
-        public async Task Upload_WrongFileType_BadRequest()
+        public void Upload_WrongFileType_BadRequest()
         {
             // Arrange
             // Setup mock file using a memory stream
@@ -49,8 +50,10 @@ namespace DynamoXmlConverter.Tests
             // Create FormFile with desired data
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
+            var files = new List<IFormFile>() { file };
+
             // Act
-            var result = await _controller.Upload(file);
+            var result = _controller.Upload(files);
             var resultType = result as BadRequestObjectResult;
 
             // Assert
@@ -60,7 +63,7 @@ namespace DynamoXmlConverter.Tests
         }
 
         [Fact]
-        public async Task Upload_CorrectFileType_OkResult()
+        public void Upload_CorrectFileType_OkResult()
         {
             // Arrange
             // Setup mock file using a memory stream
@@ -75,8 +78,10 @@ namespace DynamoXmlConverter.Tests
             // Create FormFile with desired data
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
+            var files = new List<IFormFile>() { file };
+
             // Act
-            var result = await _controller.Upload(file);
+            var result = _controller.Upload(files);
             var resultType = result as OkObjectResult;
 
             // Assert
@@ -85,7 +90,7 @@ namespace DynamoXmlConverter.Tests
         }
 
         [Fact]
-        public async Task Upload_IncorrectlyFormattedFile_BadRequest()
+        public void Upload_IncorrectlyFormattedFile_BadRequest()
         {
             // Arrange
             // Setup mock file using a memory stream
@@ -100,8 +105,10 @@ namespace DynamoXmlConverter.Tests
             // Create FormFile with desired data
             IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
 
+            var files = new List<IFormFile>() { file };
+
             // Act
-            var result = await _controller.Upload(file);
+            var result = _controller.Upload(files);
             var resultType = result as BadRequestObjectResult;
 
             // Assert
