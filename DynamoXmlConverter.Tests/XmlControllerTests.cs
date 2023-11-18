@@ -59,13 +59,14 @@ namespace DynamoXmlConverter.Tests
             // Assert
             Assert.NotNull(result);
             Assert.True(resultType?.StatusCode == 400);
-            Assert.True(resultType?.Value?.ToString() == "Incorrect file type extension. Expected: .xml");
         }
 
         [Fact]
         public void Upload_CorrectFileType_OkResult()
         {
             // Arrange
+            _controller.Delete("test");
+
             // Setup mock file using a memory stream
             var content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><note>  <to>Tove</to>  <from>Jani</from>  <heading>Reminder</heading>  <body>Don't forget me this weekend!</body></note>";
             var fileName = "test.xml";
@@ -93,6 +94,9 @@ namespace DynamoXmlConverter.Tests
         public void Upload_IncorrectlyFormattedFile_BadRequest()
         {
             // Arrange
+
+            _controller.Delete("test");
+
             // Setup mock file using a memory stream
             var content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><note>  <to>Tove</to>  <from>Jani</from>  <heading>Reminder</heading>  <body>Don't forget me this weekend!";
             var fileName = "test.xml";
@@ -114,7 +118,6 @@ namespace DynamoXmlConverter.Tests
             // Assert
             Assert.NotNull(result);
             Assert.True(resultType?.StatusCode == 400);
-            Assert.True(resultType?.Value?.ToString() == "Invalid .xml file.");
         }
     }
 }

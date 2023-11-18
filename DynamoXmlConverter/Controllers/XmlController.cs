@@ -30,7 +30,34 @@ namespace DynamoXmlConverter.Controllers
 
                 var results = UploadFiles(files);
 
+                if (results.Any(x => x.Success == false))
+                    return BadRequest(results);
+
                 return Ok(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong.");
+            }
+        }
+
+        [HttpDelete]
+        [Route("api/xml/delete")]
+        public IActionResult Delete(string fileName)
+        {
+            try
+            {
+                var fileFolderPath = GetFileFolderPath();
+                var filePath = Path.Combine(fileFolderPath, fileName + ".json");
+
+                if (!System.IO.File.Exists(filePath))
+                {
+                    return BadRequest("File does not exist.");
+                }
+
+                System.IO.File.Delete(filePath);
+
+                return Ok();
             }
             catch (Exception)
             {
@@ -73,7 +100,7 @@ namespace DynamoXmlConverter.Controllers
                 return result;
             }
 
-            string fileFolderPath = Path.Combine(_hostingEnvironment.WebRootPath, FILE_UPLOADS_FOLDER_NAME);
+            string fileFolderPath = GetFileFolderPath();
 
             if (!Directory.Exists(fileFolderPath))
                 Directory.CreateDirectory(fileFolderPath);
@@ -110,6 +137,11 @@ namespace DynamoXmlConverter.Controllers
 
             result.Success = true;
             return result;
+        }
+
+        private string GetFileFolderPath()
+        {
+            return Path.Combine(_hostingEnvironment.WebRootPath, FILE_UPLOADS_FOLDER_NAME);
         }
     }
 }
