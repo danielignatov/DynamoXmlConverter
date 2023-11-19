@@ -1,8 +1,8 @@
-﻿using DynamoXmlConverter.UI.Models;
+﻿using DynamoXmlConverter.Models.Results;
+using DynamoXmlConverter.UI.Models.Home;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Net.Mime;
-using System.Text;
 
 namespace DynamoXmlConverter.UI.Controllers
 {
@@ -19,12 +19,18 @@ namespace DynamoXmlConverter.UI.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var model = new IndexViewModel();
+
+            //model.Alerts.Add(new Models.Shared.AlertViewModel() { AlertType = Models.Shared.AlertType.Success, Text = "Hello world!" });
+
+            return View(model);
         }
 
         [HttpPost]
         public async Task<ActionResult> Index(IFormFile[] files)
         {
+            var model = new IndexViewModel();
+
             try
             {
                 using MultipartFormDataContent multipartContent = new();
@@ -43,24 +49,44 @@ namespace DynamoXmlConverter.UI.Controllers
 
                 using var response = await _httpClient.PostAsync("https://localhost:5030/api/xml/upload", multipartContent);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    // Data uploaded successfully.
-                }
+                var responseResultJsonString = await response.Content.ReadAsStringAsync();
 
-                ViewBag.Message = "Selected Files are Upload successfully.";
+                var responseResult = JsonConvert.DeserializeObject<UploadOperationResult>(responseResultJsonString) ?? new UploadOperationResult();
+
+                switch (response.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.OK:
+                        foreach (var file in responseResult.Files)
+                        {
+                            model.Alerts.Add(new Models.Shared.AlertViewModel() { AlertType = Models.Shared.AlertType.Success, Text = $"{file.FileName} {file.Message}" });
+                        }
+                        break;
+                    case System.Net.HttpStatusCode.BadRequest:
+                        model.Alerts.Add(new Models.Shared.AlertViewModel() { AlertType = Models.Shared.AlertType.Warning, Text = responseResult.Message });
+                        foreach (var file in responseResult.Files)
+                        {
+                            model.Alerts.Add(new Models.Shared.AlertViewModel() { AlertType = file.Success ? Models.Shared.AlertType.Success : Models.Shared.AlertType.Warning, Text = $"{file.FileName} {file.Message}" });
+                        }
+                        break;
+                    case System.Net.HttpStatusCode.InternalServerError:
+                        model.Alerts.Add(new Models.Shared.AlertViewModel() { AlertType = Models.Shared.AlertType.Error, Text = responseResult.Message });
+                        break;
+                    default:
+                        break;
+                }
             }
             catch
             {
-                ViewBag.Message = "Error: Error occure for uploading a file.";
+                model.Alerts.Add(new Models.Shared.AlertViewModel() { AlertType = Models.Shared.AlertType.Error, Text = "Something went terribly wrong!" });
             }
-            return View();
+
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new Models.Shared.ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

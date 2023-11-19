@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamoXmlConverter.API.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamoXmlConverter.UI", "DynamoXmlConverter.UI\DynamoXmlConverter.UI.csproj", "{0EBC59F2-922E-4F46-8B84-86C72C126000}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamoXmlConverter.Models", "DynamoXmlConverter.Models\DynamoXmlConverter.Models.csproj", "{1BC238ED-95AD-4736-BA25-2ABB4C7B595E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0EBC59F2-922E-4F46-8B84-86C72C126000}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EBC59F2-922E-4F46-8B84-86C72C126000}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EBC59F2-922E-4F46-8B84-86C72C126000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BC238ED-95AD-4736-BA25-2ABB4C7B595E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC238ED-95AD-4736-BA25-2ABB4C7B595E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC238ED-95AD-4736-BA25-2ABB4C7B595E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC238ED-95AD-4736-BA25-2ABB4C7B595E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

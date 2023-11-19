@@ -15,4 +15,8 @@
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DynamoXmlConverter.Models\DynamoXmlConverter.Models.csproj" />
+  </ItemGroup>
+
 </Project>

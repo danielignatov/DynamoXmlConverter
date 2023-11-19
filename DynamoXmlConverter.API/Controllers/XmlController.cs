@@ -1,5 +1,5 @@
 using DynamoXmlConverter.API.Extensions;
-using DynamoXmlConverter.API.Models;
+using DynamoXmlConverter.Models.Results;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
 using System.Xml;
@@ -23,21 +23,33 @@ namespace DynamoXmlConverter.API.Controllers
         [Route("api/xml/upload")]
         public IActionResult Upload(List<IFormFile> files)
         {
+            var result = new UploadOperationResult();
+
             try
             {
                 if (files.Count == 0)
-                    return BadRequest("No file uploaded.");
+                {
+                    result.Message = "No file uploaded.";
+                    return BadRequest(result);
+                }
+                
+                var fileUploadResults = UploadFiles(files);
 
-                var results = UploadFiles(files);
+                if (fileUploadResults.Any(x => x.Success == false))
+                {
+                    result.Message = "There was an issue with one or more files.";
+                    result.Files = fileUploadResults;
+                    return BadRequest(result);
+                }
 
-                if (results.Any(x => x.Success == false))
-                    return BadRequest(results);
-
-                return Ok(results);
+                result.Message = "File(s) uploaded successfully!";
+                result.Files = fileUploadResults;
+                return Ok(result);
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong.");
+                result.Message = "Something went wrong.";
+                return StatusCode(StatusCodes.Status500InternalServerError, result);
             }
         }
 

@@ -1,4 +1,4 @@
-namespace DynamoXmlConverter.UI.Models
+namespace DynamoXmlConverter.UI.Models.Shared
 {
     public class ErrorViewModel
     {
