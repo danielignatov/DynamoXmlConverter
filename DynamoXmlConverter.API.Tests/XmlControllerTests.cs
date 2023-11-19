@@ -1,9 +1,9 @@
-using DynamoXmlConverter.Controllers;
+using DynamoXmlConverter.API.Controllers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DynamoXmlConverter.Tests
+namespace DynamoXmlConverter.API.Tests
 {
     public class XmlControllerTests
     {

@@ -1,10 +1,10 @@
-using DynamoXmlConverter.Extensions;
-using DynamoXmlConverter.Models;
+using DynamoXmlConverter.API.Extensions;
+using DynamoXmlConverter.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
 using System.Xml;
 
-namespace DynamoXmlConverter.Controllers
+namespace DynamoXmlConverter.API.Controllers
 {
     [ApiController]
     public class XmlController : ControllerBase

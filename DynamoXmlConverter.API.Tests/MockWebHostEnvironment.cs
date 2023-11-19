@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 
-namespace DynamoXmlConverter.Tests
+namespace DynamoXmlConverter.API.Tests
 {
     internal class MockWebHostEnvironment : IWebHostEnvironment
     {

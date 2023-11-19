@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamoXmlConverter.API", "DynamoXmlConverter\DynamoXmlConverter.API.csproj", "{64F09B9E-B426-490B-B4B4-20A699952842}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamoXmlConverter.API", "DynamoXmlConverter.API\DynamoXmlConverter.API.csproj", "{64F09B9E-B426-490B-B4B4-20A699952842}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamoXmlConverter.API.Tests", "DynamoXmlConverter.Tests\DynamoXmlConverter.API.Tests.csproj", "{6CE86AF0-8FA5-4681-8C6F-428B95554FF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamoXmlConverter.API.Tests", "DynamoXmlConverter.API.Tests\DynamoXmlConverter.API.Tests.csproj", "{6CE86AF0-8FA5-4681-8C6F-428B95554FF3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamoXmlConverter.UI", "DynamoXmlConverter.UI\DynamoXmlConverter.UI.csproj", "{0EBC59F2-922E-4F46-8B84-86C72C126000}"
 EndProject

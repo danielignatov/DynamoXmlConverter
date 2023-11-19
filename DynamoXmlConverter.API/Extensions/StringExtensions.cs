@@ -1,4 +1,4 @@
-﻿namespace DynamoXmlConverter.Extensions
+﻿namespace DynamoXmlConverter.API.Extensions
 {
     public static class StringExtensions
     {

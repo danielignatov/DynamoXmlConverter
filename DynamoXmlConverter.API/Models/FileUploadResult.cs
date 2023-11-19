@@ -1,4 +1,4 @@
-﻿namespace DynamoXmlConverter.Models
+﻿namespace DynamoXmlConverter.API.Models
 {
     public class FileUploadResult
     {
