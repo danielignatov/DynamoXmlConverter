@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Dynamo XML Converter";
+}
+
+<div class="container text-center mt-5">
+    <h1 class="display-4">Dynamo XML Converter</h1>
+    <form enctype="multipart/form-data" method="post" asp-controller="Home" asp-action="Index">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="form-group mb-3 mt-3">
+                    <input type="file" name="files" class="form-control" multiple />
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="form-group">
+                    <div class="d-grid gap-2">
+                        <input type="submit" value="Upload" class="btn btn-primary">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

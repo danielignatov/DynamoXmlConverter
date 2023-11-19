@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DynamoXmlConverter\DynamoXmlConverter.csproj" />
+    <ProjectReference Include="..\DynamoXmlConverter\DynamoXmlConverter.API.csproj" />
   </ItemGroup>
 
 </Project>
