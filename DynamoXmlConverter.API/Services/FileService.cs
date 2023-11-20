@@ -123,6 +123,7 @@ namespace DynamoXmlConverter.API.Services
             }
 
             result.Success = true;
+            result.Message = Messages.FileUploadedSuccessfully;
             return result;
         }
 

@@ -39,18 +39,7 @@ namespace DynamoXmlConverter.API.Tests.Controllers
         public void Upload_WrongFileType_BadRequest()
         {
             // Arrange
-            // Setup mock file using a memory stream
-            var content = "Hello World from a Fake File";
-            var fileName = "test.pdf";
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(content);
-            writer.Flush();
-            stream.Position = 0;
-
-            // Create FormFile with desired data
-            IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
-
+            IFormFile file = TestingUtils.CreateIFormFileFile("test.pdf", Constants.HELLO_WORLD);
             var files = new List<IFormFile>() { file };
 
             // Act
@@ -66,20 +55,8 @@ namespace DynamoXmlConverter.API.Tests.Controllers
         public void Upload_CorrectFileType_OkResult()
         {
             // Arrange
-            _fileService.DeleteFile("test.json");
-
-            // Setup mock file using a memory stream
-            var content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><note>  <to>Tove</to>  <from>Jani</from>  <heading>Reminder</heading>  <body>Don't forget me this weekend!</body></note>";
-            var fileName = "test.xml";
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(content);
-            writer.Flush();
-            stream.Position = 0;
-
-            // Create FormFile with desired data
-            IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
-
+            _fileService.DeleteFile("test3.json");
+            IFormFile file = TestingUtils.CreateIFormFileFile("test3.xml", Constants.XML_CONTENT_EXAMPLE_GOOD);
             var files = new List<IFormFile>() { file };
 
             // Act
@@ -95,21 +72,8 @@ namespace DynamoXmlConverter.API.Tests.Controllers
         public void Upload_IncorrectlyFormattedFile_BadRequest()
         {
             // Arrange
-
-            _fileService.DeleteFile("test.json");
-
-            // Setup mock file using a memory stream
-            var content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><note>  <to>Tove</to>  <from>Jani</from>  <heading>Reminder</heading>  <body>Don't forget me this weekend!";
-            var fileName = "test.xml";
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(content);
-            writer.Flush();
-            stream.Position = 0;
-
-            // Create FormFile with desired data
-            IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
-
+            _fileService.DeleteFile("test4.json");
+            IFormFile file = TestingUtils.CreateIFormFileFile("test4.xml", Constants.XML_CONTENT_EXAMPLE_BAD);
             var files = new List<IFormFile>() { file };
 
             // Act
