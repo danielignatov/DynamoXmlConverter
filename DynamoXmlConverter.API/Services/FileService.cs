@@ -5,6 +5,9 @@ using System.Xml;
 
 namespace DynamoXmlConverter.API.Services
 {
+    /// <summary>
+    /// Service governing file related operations
+    /// </summary>
     public class FileService : IFileService
     {
         private const string FILE_UPLOADS_FOLDER_NAME = "uploads";
@@ -16,9 +19,13 @@ namespace DynamoXmlConverter.API.Services
             _hostingEnvironment = hostingEnvironment;
         }
 
-        // https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/how-to-write-a-simple-parallel-foreach-loop
+        /// <summary>
+        /// Process group of XML files, converting them to JSON, and then save them in a pre-defined directory.
+        /// </summary>
         public List<FileUploadResult> ProcessXmlFiles(List<IFormFile> files)
         {
+            // https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/how-to-write-a-simple-parallel-foreach-loop
+
             var fileUploadResults = new ConcurrentBag<FileUploadResult>();
 
             Parallel.ForEach(files, file =>
@@ -30,6 +37,10 @@ namespace DynamoXmlConverter.API.Services
             return fileUploadResults.ToList();
         }
 
+        /// <summary>
+        /// Deletes a file by given file name
+        /// </summary>
+        /// <param name="fileName">File name, including extension</param>
         public bool DeleteFile(string fileName)
         {
             try
@@ -52,6 +63,9 @@ namespace DynamoXmlConverter.API.Services
             }
         }
 
+        /// <summary>
+        /// Process XML file into JSON
+        /// </summary>
         private FileUploadResult UploadXmlFile(IFormFile file)
         {
             var result = new FileUploadResult();
@@ -112,6 +126,9 @@ namespace DynamoXmlConverter.API.Services
             return result;
         }
 
+        /// <summary>
+        /// Retreve the folder path where the files are stored
+        /// </summary>
         private string GetFileFolderPath()
         {
             return Path.Combine(_hostingEnvironment.WebRootPath, FILE_UPLOADS_FOLDER_NAME);
