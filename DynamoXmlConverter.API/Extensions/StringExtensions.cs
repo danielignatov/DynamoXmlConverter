@@ -1,7 +1,13 @@
 ﻿namespace DynamoXmlConverter.API.Extensions
 {
+    /// <summary>
+    /// Collection of string extension methods
+    /// </summary>
     public static class StringExtensions
     {
+        /// <summary>
+        /// XML to JSON serializer
+        /// </summary>
         public static string XmlToPrettyJson(this string xml)
         {
             var doc = System.Xml.Linq.XDocument.Parse(xml);
@@ -18,7 +24,6 @@
 		/// <param name="overwrite">Whether to overwrite pre-existing files.</param>
 		public static void SafelyWriteToFile(this string input, string filePath, bool overwrite = true)
         {
-
             // Unique id for global mutex - Global prefix means it is global to the machine
             // We use filePath to ensure the mutex is only held for the particular file
             string mutexId = string.Format("Global\\{{{0}}}", Path.GetFileNameWithoutExtension(filePath));
@@ -26,12 +31,10 @@
             // We create/query the Mutex
             using (var mutex = new Mutex(false, mutexId))
             {
-
                 var hasHandle = false;
 
                 try
                 {
-
                     // We wait for lock to release
                     hasHandle = mutex.WaitOne(Timeout.Infinite, false);
 
@@ -40,11 +43,9 @@
                         System.IO.File.WriteAllText(filePath, input);
                     else
                         System.IO.File.AppendAllText(filePath, input);
-
                 }
                 finally
                 {
-
                     // If we have the Mutex, we release it
                     if (hasHandle)
                         mutex.ReleaseMutex();

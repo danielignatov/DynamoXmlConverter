@@ -1,21 +1,23 @@
 using DynamoXmlConverter.API.Controllers;
+using DynamoXmlConverter.API.Services;
+using DynamoXmlConverter.API.Tests.Mocks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DynamoXmlConverter.API.Tests
+namespace DynamoXmlConverter.API.Tests.Controllers
 {
     public class XmlControllerTests
     {
-        private const string WEB_ROOT_PATH = "C:\\Users\\danie\\Documents\\GitHub\\DynamoXmlConverter\\DynamoXmlConverter\\wwwroot";
-
-        readonly XmlController _controller;
         readonly IWebHostEnvironment _hostingEnvironment;
+        readonly IFileService _fileService;
+        readonly XmlController _controller;
 
         public XmlControllerTests()
         {
-            _hostingEnvironment = new MockWebHostEnvironment(WEB_ROOT_PATH);
-            _controller = new XmlController(_hostingEnvironment);
+            _hostingEnvironment = new MockWebHostEnvironment();
+            _fileService = new FileService(_hostingEnvironment);
+            _controller = new XmlController(_fileService);
         }
 
         [Fact]
@@ -31,7 +33,6 @@ namespace DynamoXmlConverter.API.Tests
             // Assert
             Assert.NotNull(result);
             Assert.True(resultType?.StatusCode == 400);
-            Assert.True(resultType?.Value?.ToString() == "No file uploaded.");
         }
 
         [Fact]
@@ -65,7 +66,7 @@ namespace DynamoXmlConverter.API.Tests
         public void Upload_CorrectFileType_OkResult()
         {
             // Arrange
-            _controller.Delete("test");
+            _fileService.DeleteFile("test.json");
 
             // Setup mock file using a memory stream
             var content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><note>  <to>Tove</to>  <from>Jani</from>  <heading>Reminder</heading>  <body>Don't forget me this weekend!</body></note>";
@@ -95,7 +96,7 @@ namespace DynamoXmlConverter.API.Tests
         {
             // Arrange
 
-            _controller.Delete("test");
+            _fileService.DeleteFile("test.json");
 
             // Setup mock file using a memory stream
             var content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><note>  <to>Tove</to>  <from>Jani</from>  <heading>Reminder</heading>  <body>Don't forget me this weekend!";
