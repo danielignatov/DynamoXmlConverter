@@ -31,7 +31,7 @@ namespace DynamoXmlConverter.API.Controllers
         [ProducesResponseType(typeof(UploadOperationResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(UploadOperationResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(UploadOperationResult), StatusCodes.Status500InternalServerError)]
-        public IActionResult Upload(List<IFormFile> files)
+        public IActionResult Upload([FromBody] List<IFormFile> files)
         {
             var result = new UploadOperationResult();
 

@@ -8,20 +8,16 @@ namespace DynamoXmlConverter.UI.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly HttpClient _httpClient;
 
-        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
+        public HomeController(IHttpClientFactory httpClientFactory)
         {
-            _logger = logger;
             _httpClient = httpClientFactory.CreateClient("dynamoXmlConverterApi");
         }
 
         public IActionResult Index()
         {
             var model = new IndexViewModel();
-
-            //model.Alerts.Add(new Models.Shared.AlertViewModel() { AlertType = Models.Shared.AlertType.Success, Text = "Hello world!" });
 
             return View(model);
         }
