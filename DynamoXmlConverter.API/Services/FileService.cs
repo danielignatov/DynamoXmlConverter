@@ -19,6 +19,45 @@ namespace DynamoXmlConverter.API.Services
             _hostingEnvironment = hostingEnvironment;
         }
 
+        public List<string> AllUploadedJsonFileNames()
+        {
+            var result = new List<string>();
+
+            DirectoryInfo directory = new DirectoryInfo(GetFileFolderPath());
+
+            FileInfo[] Files = directory.GetFiles("*.json");
+            
+            foreach (FileInfo file in Files)
+            {
+                result.Add(file.Name);
+            }
+
+            return result;
+        }
+
+        public async Task<FileResult> GetFile(string fileName)
+        {
+            var result = new FileResult();
+
+            var fileFolderPath = GetFileFolderPath();
+            var filePath = Path.Combine(fileFolderPath, fileName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                result.Success = false;
+                return result;
+            }
+
+            var file = await File.ReadAllBytesAsync(filePath);
+
+            result.FileName = fileName;
+            result.Success = true;
+            result.Data = file;
+            result.MimeType = "application/json";
+
+            return result;
+        }
+
         /// <summary>
         /// Process group of XML files, converting them to JSON, and then save them in a pre-defined directory.
         /// </summary>

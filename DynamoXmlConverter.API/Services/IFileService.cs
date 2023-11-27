@@ -17,5 +17,9 @@ namespace DynamoXmlConverter.API.Services
         /// </summary>
         /// <param name="fileName">File name, including extension</param>
         public bool DeleteFile(string fileName);
+
+        public List<string> AllUploadedJsonFileNames();
+
+        public Task<FileResult> GetFile(string fileName);
     }
 }

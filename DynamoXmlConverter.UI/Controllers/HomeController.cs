@@ -8,10 +8,12 @@ namespace DynamoXmlConverter.UI.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IConfiguration _configuration;
         private readonly HttpClient _httpClient;
 
-        public HomeController(IHttpClientFactory httpClientFactory)
+        public HomeController(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
+            _configuration = configuration;
             _httpClient = httpClientFactory.CreateClient("dynamoXmlConverterApi");
         }
 
@@ -31,7 +33,7 @@ namespace DynamoXmlConverter.UI.Controllers
             {
                 using MultipartFormDataContent multipartContent = new();
 
-                foreach (IFormFile file in files)
+                Parallel.ForEach(files, file =>
                 {
                     multipartContent.Add(new StreamContent(file.OpenReadStream())
                     {
@@ -41,9 +43,11 @@ namespace DynamoXmlConverter.UI.Controllers
                             ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType)
                         }
                     }, file.Name, file.FileName);
-                }
+                });
 
-                using var response = await _httpClient.PostAsync("https://localhost:5030/api/xml/upload", multipartContent);
+                var enpointUrl = $"{_configuration["ApiBaseUrl"]}/api/xml/upload";
+
+                using var response = await _httpClient.PostAsync(enpointUrl, multipartContent);
 
                 var responseResultJsonString = await response.Content.ReadAsStringAsync();
 

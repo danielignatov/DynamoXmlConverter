@@ -3,7 +3,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHttpClient("dynamoXmlConverterApi", c => c.BaseAddress = new System.Uri("https://localhost:5030"));
+builder.Services.AddHttpClient("dynamoXmlConverterApi", c => c.BaseAddress = new System.Uri(builder.Configuration["ApiBaseUrl"]));
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 var app = builder.Build();
 
